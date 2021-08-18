@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pairTextView: TextView
     private lateinit var boardRecyclerView: RecyclerView
 
+    private lateinit var boardOption: BoardOption
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,10 +22,12 @@ class MainActivity : AppCompatActivity() {
         pairTextView = findViewById(R.id.main_pair_text_view)
         boardRecyclerView = findViewById(R.id.main_board_recycler_view)
 
+        boardOption = BoardOption.BOARD_MAX
 
-        val boardLayoutManager = GridLayoutManager(this, 2)
+        val boardLayoutManager = GridLayoutManager(this, boardOption.getWidth())
+
         boardRecyclerView.apply {
-            adapter = BoardAdapter(context, 8)
+            adapter = BoardAdapter(context, boardOption)
             setHasFixedSize(true)
             layoutManager = boardLayoutManager
         }
