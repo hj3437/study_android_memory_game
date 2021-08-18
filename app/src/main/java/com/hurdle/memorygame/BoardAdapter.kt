@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.min
 
 class BoardAdapter(private val context: Context, private val boardOption: BoardOption) :
     RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
@@ -22,8 +23,16 @@ class BoardAdapter(private val context: Context, private val boardOption: BoardO
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
+        val cardWidth = parent.width / boardOption.getWidth()
+        val cardHeight = parent.height / boardOption.getHeight()
+
+        val cardSize = min(cardWidth, cardHeight)
+
         val inflater = LayoutInflater.from(parent.context)
-        val rootView = inflater.inflate(R.layout.card_list_item, parent, false)
+        val rootView: View = inflater.inflate(R.layout.card_list_item, parent, false)
+
+        rootView.layoutParams.width = cardSize
+        rootView.layoutParams.height = cardSize
 
         return BoardViewHolder(rootView)
     }
