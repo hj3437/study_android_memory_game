@@ -23,11 +23,13 @@ class MainActivity : AppCompatActivity() {
         boardRecyclerView = findViewById(R.id.main_board_recycler_view)
 
         boardOption = BoardOption.BOARD_MAX
+        val icons = CARD_ICONS.shuffled().take(boardOption.getNumberPair())
+        val shuffledIcons = (icons.shuffled() + icons.shuffled())
 
         val boardLayoutManager = GridLayoutManager(this, boardOption.getWidth())
 
         boardRecyclerView.apply {
-            adapter = BoardAdapter(context, boardOption)
+            adapter = BoardAdapter(context, boardOption, shuffledIcons)
             setHasFixedSize(true)
             layoutManager = boardLayoutManager
         }

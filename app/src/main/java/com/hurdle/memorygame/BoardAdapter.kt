@@ -9,13 +9,20 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.min
 
-class BoardAdapter(private val context: Context, private val boardOption: BoardOption) :
+class BoardAdapter(
+    private val context: Context,
+    private val boardOption: BoardOption,
+    private val shuffledIcons: List<Int>
+) :
     RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
 
-    class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    // inner class 사용시 BoardAdapter에서 받은 shuffledIcons을 inner class 안에서 사용할 수 있습니다.
+    inner class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var cardImageView: ImageView = itemView.findViewById(R.id.card_item_image_view)
 
         fun bind(position: Int) {
+            cardImageView.setImageResource(shuffledIcons[position])
+
             cardImageView.setOnClickListener {
                 Log.d("TAG", "bind: IMAEGE CLICKED")
             }
