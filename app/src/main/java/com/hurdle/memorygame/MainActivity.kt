@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var boardRecyclerView: RecyclerView
 
     private lateinit var boardOption: BoardOption
+    private lateinit var memoryGame: MemoryGame
+    private lateinit var boardAdapter: BoardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,18 +27,29 @@ class MainActivity : AppCompatActivity() {
 
         boardOption = BoardOption.BOARD_MAX
 
-        val memoryGame = MemoryGame(boardOption)
+        memoryGame = MemoryGame(boardOption)
+
+        boardAdapter = BoardAdapter(
+            applicationContext,
+            boardOption,
+            memoryGame.cards,
+            object : BoardAdapter.CardClickListener {
+                override fun onCardClicked(position: Int) {
+                    // Log.d("TAG", "onCardClicked: $position")
+                    updateCardFlip(position)
+                }
+            })
 
         val boardLayoutManager = GridLayoutManager(this, boardOption.getWidth())
 
         boardRecyclerView.apply {
-            adapter = BoardAdapter(context, boardOption, memoryGame.cards, object:BoardAdapter.CardClickListener{
-                override fun onCardClicked(position: Int) {
-                    Log.d("TAG", "onCardClicked: $position")
-                }
-            })
+            adapter = boardAdapter
             setHasFixedSize(true)
             layoutManager = boardLayoutManager
         }
+    }
+
+    private fun updateCardFlip(position: Int) {
+        memoryGame.flipCard(position)
     }
 }
