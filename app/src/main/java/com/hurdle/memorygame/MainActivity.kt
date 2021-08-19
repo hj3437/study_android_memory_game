@@ -51,5 +51,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateCardFlip(position: Int) {
         memoryGame.flipCard(position)
+        boardAdapter.notifyDataSetChanged()
     }
 }
