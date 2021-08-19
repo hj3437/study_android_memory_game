@@ -1,11 +1,14 @@
 package com.hurdle.memorygame
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.min
 
@@ -28,7 +31,7 @@ class BoardAdapter(
 
         fun bind(position: Int) {
             val card = cards[position]
-
+            val colorStateList:ColorStateList? = null
             if (card.isFlip) {
                 cardImageView.setImageResource(card.id)
             } else {
@@ -37,9 +40,12 @@ class BoardAdapter(
 
             if (card.isMatch) {
                 cardImageView.alpha = .4f
+                ContextCompat.getColorStateList(context, R.color.color_card_gray)
             } else {
                 cardImageView.alpha = 1f
             }
+
+            ViewCompat.setBackgroundTintList(cardImageView, colorStateList)
 
             cardImageView.setOnClickListener {
                 // Log.d("TAG", "bind: IMAGE CLICKED")

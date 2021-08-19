@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         pairTextView = findViewById(R.id.main_pair_text_view)
         boardRecyclerView = findViewById(R.id.main_board_recycler_view)
 
-        boardOption = BoardOption.BOARD_MAX
+        boardOption = BoardOption.BOARD_MIN
 
         memoryGame = MemoryGame(boardOption)
 
