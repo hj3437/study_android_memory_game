@@ -12,19 +12,29 @@ import kotlin.math.min
 class BoardAdapter(
     private val context: Context,
     private val boardOption: BoardOption,
-    private val shuffledIcons: List<Int>
+    private val cards: List<Card>,
+    private val cardClickListener: CardClickListener
 ) :
     RecyclerView.Adapter<BoardAdapter.BoardViewHolder>() {
+
+    interface CardClickListener {
+        fun onCardClicked(position: Int)
+    }
 
     // inner class 사용시 BoardAdapter에서 받은 shuffledIcons을 inner class 안에서 사용할 수 있습니다.
     inner class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var cardImageView: ImageView = itemView.findViewById(R.id.card_item_image_view)
 
         fun bind(position: Int) {
-            cardImageView.setImageResource(shuffledIcons[position])
+            if(cards[position].isFlip) {
+                cardImageView.setImageResource(cards[position].id)
+            }else {
+                cardImageView.setImageResource(R.drawable.ic_launcher_foreground)
+            }
 
             cardImageView.setOnClickListener {
-                Log.d("TAG", "bind: IMAEGE CLICKED")
+                // Log.d("TAG", "bind: IMAGE CLICKED")
+                cardClickListener.onCardClicked(position)
             }
         }
     }
@@ -51,7 +61,7 @@ class BoardAdapter(
     override fun getItemCount(): Int = boardOption.cardNumber
 }
 
-class OnCardClickListener(val clickListener: () -> Unit) {
-    fun onClick() = clickListener()
-}
+//class OnCardClickListener(val clickListener: () -> Unit) {
+//    fun onClick() = clickListener()
+//}
 

@@ -2,6 +2,7 @@ package com.hurdle.memorygame
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,13 +24,17 @@ class MainActivity : AppCompatActivity() {
         boardRecyclerView = findViewById(R.id.main_board_recycler_view)
 
         boardOption = BoardOption.BOARD_MAX
-        val icons = CARD_ICONS.shuffled().take(boardOption.getNumberPair())
-        val shuffledIcons = (icons.shuffled() + icons.shuffled())
+
+        val memoryGame = MemoryGame(boardOption)
 
         val boardLayoutManager = GridLayoutManager(this, boardOption.getWidth())
 
         boardRecyclerView.apply {
-            adapter = BoardAdapter(context, boardOption, shuffledIcons)
+            adapter = BoardAdapter(context, boardOption, memoryGame.cards, object:BoardAdapter.CardClickListener{
+                override fun onCardClicked(position: Int) {
+                    Log.d("TAG", "onCardClicked: $position")
+                }
+            })
             setHasFixedSize(true)
             layoutManager = boardLayoutManager
         }
