@@ -25,11 +25,20 @@ class BoardAdapter(
     inner class BoardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var cardImageView: ImageView = itemView.findViewById(R.id.card_item_image_view)
 
+
         fun bind(position: Int) {
-            if(cards[position].isFlip) {
-                cardImageView.setImageResource(cards[position].id)
-            }else {
+            val card = cards[position]
+
+            if (card.isFlip) {
+                cardImageView.setImageResource(card.id)
+            } else {
                 cardImageView.setImageResource(R.drawable.ic_launcher_foreground)
+            }
+
+            if (card.isMatch) {
+                cardImageView.alpha = .4f
+            } else {
+                cardImageView.alpha = 1f
             }
 
             cardImageView.setOnClickListener {
