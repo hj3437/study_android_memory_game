@@ -50,4 +50,12 @@ class MemoryGame(private val boardOption: BoardOption) {
             }
         }
     }
+
+    fun haveWonGame(): Boolean {
+        return pairFound == boardOption.getNumberPair()
+    }
+
+    fun isCardFaceUp(position: Int): Boolean {
+        return cards[position].isFlip
+    }
 }

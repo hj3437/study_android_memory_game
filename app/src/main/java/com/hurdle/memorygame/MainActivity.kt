@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -50,7 +51,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCardFlip(position: Int) {
-        memoryGame.flipCard(position)
+        if(memoryGame.haveWonGame()){
+            Toast.makeText(this, "YOU WON", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if(memoryGame.isCardFaceUp(position)){
+            Toast.makeText(this, "Invaild Move", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Add data
+        if(memoryGame.flipCard(position)){
+            Log.d("TAG", "updateCardFlip: ${memoryGame.pairFound}")
+        }
+
         boardAdapter.notifyDataSetChanged()
     }
 }
