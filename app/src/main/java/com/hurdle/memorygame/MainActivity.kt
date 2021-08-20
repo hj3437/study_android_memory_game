@@ -4,8 +4,14 @@ import android.animation.ArgbEvaluator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +34,43 @@ class MainActivity : AppCompatActivity() {
         pairTextView = findViewById(R.id.main_pair_text_view)
         boardRecyclerView = findViewById(R.id.main_board_recycler_view)
 
+        initBoard()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_main_refresh -> {
+                if(memoryGame.getNumMoves() > 0 && !memoryGame.haveWonGame()){
+                    showAlertDialog("Quit your current game?", null, View.OnClickListener {
+                        initBoard()
+
+                    })
+                }else{
+                    initBoard()
+
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showAlertDialog(title: String, view: View?, positiveClickListener: View.OnClickListener) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setView(view)
+            .setNegativeButton("Cancel", null)
+            .setPositiveButton("OK") { _, _ ->
+                positiveClickListener.onClick(null)
+            }.show()
+    }
+
+    private fun initBoard() {
         pairTextView.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
 
         boardOption = BoardOption.BOARD_MIN
