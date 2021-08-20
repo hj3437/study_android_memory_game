@@ -1,10 +1,12 @@
 package com.hurdle.memorygame
 
+import android.animation.ArgbEvaluator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -25,6 +27,8 @@ class MainActivity : AppCompatActivity() {
         moveTextView = findViewById(R.id.main_move_text_view)
         pairTextView = findViewById(R.id.main_pair_text_view)
         boardRecyclerView = findViewById(R.id.main_board_recycler_view)
+
+        pairTextView.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
 
         boardOption = BoardOption.BOARD_MIN
 
@@ -64,8 +68,21 @@ class MainActivity : AppCompatActivity() {
         // Add data
         if(memoryGame.flipCard(position)){
             Log.d("TAG", "updateCardFlip: ${memoryGame.pairFound}")
-        }
 
+            val color = ArgbEvaluator().evaluate(
+                memoryGame.pairFound.toFloat() / boardOption.getNumberPair(),
+                ContextCompat.getColor(this, R.color.color_progress_none),
+                ContextCompat.getColor(this, R.color.color_progress_full)
+            ) as Int
+
+            pairTextView.setTextColor(color)
+            pairTextView.text = "pairs : ${memoryGame.pairFound} / ${boardOption.getNumberPair()}"
+
+            if(memoryGame.haveWonGame()){
+                Toast.makeText(this, "YOU WIN!", Toast.LENGTH_SHORT).show()
+            }
+        }
+        moveTextView.text= "Count ${memoryGame.getNumMoves()}"
         boardAdapter.notifyDataSetChanged()
     }
 }

@@ -3,7 +3,7 @@ package com.hurdle.memorygame
 class MemoryGame(private val boardOption: BoardOption) {
     val cards: List<Card>
     var pairFound = 0
-
+    var numCardFlips = 0
     private var cardSelectionFilter: Int? = null
 
     init {
@@ -16,6 +16,7 @@ class MemoryGame(private val boardOption: BoardOption) {
     }
 
     fun flipCard(position: Int): Boolean {
+        numCardFlips++
         val card = cards[position]
         var foundCard = false
         // card
@@ -57,5 +58,9 @@ class MemoryGame(private val boardOption: BoardOption) {
 
     fun isCardFaceUp(position: Int): Boolean {
         return cards[position].isFlip
+    }
+
+    fun getNumMoves(): Int {
+        return numCardFlips/2
     }
 }
