@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -26,6 +27,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var memoryGame: MemoryGame
     private lateinit var boardAdapter: BoardAdapter
 
+    private var gameName: String? = null
+    private var customGameImages: List<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         moveTextView = findViewById(R.id.main_move_text_view)
         pairTextView = findViewById(R.id.main_pair_text_view)
         boardRecyclerView = findViewById(R.id.main_board_recycler_view)
+
+        boardOption = BoardOption.BOARD_MIN
 
         initBoard()
     }
@@ -43,24 +49,53 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.menu_main_refresh -> {
-                if(memoryGame.getNumMoves() > 0 && !memoryGame.haveWonGame()){
+                if (memoryGame.getNumMoves() > 0 && !memoryGame.haveWonGame()) {
                     showAlertDialog("Quit your current game?", null, View.OnClickListener {
                         initBoard()
 
                     })
-                }else{
+                } else {
                     initBoard()
 
                 }
+            }
+
+            R.id.mi_new_size -> {
+                showNewSizeDialog()
+                return true
             }
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showAlertDialog(title: String, view: View?, positiveClickListener: View.OnClickListener) {
+    private fun showNewSizeDialog() {
+        val boardSizeView = LayoutInflater.from(this).inflate(R.layout.dialog_board_size, null)
+        val radioGroupSize = boardSizeView.findViewById<RadioGroup>(R.id.radioGroupSize)
+
+        when (boardOption) {
+            BoardOption.BOARD_MIN -> radioGroupSize.check(R.id.rbEasy)
+            BoardOption.BOARD_MEDIUM -> radioGroupSize.check(R.id.rbMedium)
+            BoardOption.BOARD_MAX -> radioGroupSize.check(R.id.rbHard)
+        }
+
+        showAlertDialog("Choose new size", boardSizeView, View.OnClickListener {
+            boardOption = when (radioGroupSize.checkedRadioButtonId) {
+                R.id.rbEasy -> BoardOption.BOARD_MIN
+                R.id.rbMedium -> BoardOption.BOARD_MEDIUM
+                else -> BoardOption.BOARD_MAX
+            }
+            initBoard()
+        })
+    }
+
+    private fun showAlertDialog(
+        title: String,
+        view: View?,
+        positiveClickListener: View.OnClickListener
+    ) {
         AlertDialog.Builder(this)
             .setTitle(title)
             .setView(view)
@@ -71,9 +106,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBoard() {
-        pairTextView.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
+        when (boardOption) {
+            BoardOption.BOARD_MIN -> {
+                moveTextView.text = "Lv1 4x2"
+                pairTextView.text = "Pairs: 0/4"
+            }
 
-        boardOption = BoardOption.BOARD_MIN
+            BoardOption.BOARD_MEDIUM -> {
+                moveTextView.text = "Lv2 6x3"
+                pairTextView.text = "Pairs: 0/9"
+            }
+
+            BoardOption.BOARD_MAX -> {
+                moveTextView.text = "Lv3 6x6"
+                pairTextView.text = "Pairs: 0/12"
+            }
+        }
+        pairTextView.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
 
         memoryGame = MemoryGame(boardOption)
 
@@ -98,18 +147,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCardFlip(position: Int) {
-        if(memoryGame.haveWonGame()){
+        if (memoryGame.haveWonGame()) {
             Toast.makeText(this, "YOU WON", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if(memoryGame.isCardFaceUp(position)){
+        if (memoryGame.isCardFaceUp(position)) {
             Toast.makeText(this, "Invaild Move", Toast.LENGTH_SHORT).show()
             return
         }
 
         // Add data
-        if(memoryGame.flipCard(position)){
+        if (memoryGame.flipCard(position)) {
             Log.d("TAG", "updateCardFlip: ${memoryGame.pairFound}")
 
             val color = ArgbEvaluator().evaluate(
@@ -121,11 +170,11 @@ class MainActivity : AppCompatActivity() {
             pairTextView.setTextColor(color)
             pairTextView.text = "pairs : ${memoryGame.pairFound} / ${boardOption.getNumberPair()}"
 
-            if(memoryGame.haveWonGame()){
+            if (memoryGame.haveWonGame()) {
                 Toast.makeText(this, "YOU WIN!", Toast.LENGTH_SHORT).show()
             }
         }
-        moveTextView.text= "Count ${memoryGame.getNumMoves()}"
+        moveTextView.text = "Count ${memoryGame.getNumMoves()}"
         boardAdapter.notifyDataSetChanged()
     }
 }
