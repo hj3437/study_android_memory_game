@@ -1,9 +1,6 @@
 ## 소개
 안드로이드 메모리 게임입니다.
 
-## 학습일정  
-2021-08-19 ~ 2021-08-20   
-
 ## 학습내용
 - RecyclerView 사용방법  
 ㄴ LayoutManager로 GridLayoutManager 사용방법을 학습  
@@ -20,6 +17,7 @@
 
 
 
-## 학습방법
+## 학습 기간 및 방법
+2021-08-19 ~ 2021-08-21  
 유튜브의 memeory game으로 검색시 나오는 영상으로 학습을 진행하였습니다.  
 https://www.youtube.com/playlist?list=PL7NYbSE8uaBCvfw20f0Q6pNSGgiYGLwzI
