@@ -21,3 +21,6 @@
 2021-08-19 ~ 2021-08-21  
 유튜브의 memeory game으로 검색시 나오는 영상으로 학습을 진행하였습니다.  
 https://www.youtube.com/playlist?list=PL7NYbSE8uaBCvfw20f0Q6pNSGgiYGLwzI
+
+## 이미지
+![](https://github.com/hj3437/study_android_memory_game/blob/master/capures/main1.png?raw=true)
